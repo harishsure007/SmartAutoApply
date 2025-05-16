@@ -1,0 +1,7 @@
+streamlit
+pandas
+scikit-learn
+selenium
+fpdf
+python-docx
+streamlit-javascript
