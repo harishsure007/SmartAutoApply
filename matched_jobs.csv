@@ -1,4 +1,4 @@
-title,company,location,link,combinedtext,matchscore
-Machine Learning Engineer,Google,California,https://www.dice.com/job2,Machine Learning Engineer Google California,0.21020466389702866
-Data Analyst,Amazon,Remote,https://www.dice.com/job1,Data Analyst Amazon Remote,0.0
-Junior Data Scientist,Microsoft,Texas,https://www.dice.com/job3,Junior Data Scientist Microsoft Texas,0.0
+title,company,location,link,matchscore
+Data Analyst,Google,New York,https://google.com,87
+Machine Learning Engineer,Meta,San Francisco,https://meta.com,73
+Backend Developer,Amazon,Austin,https://amazon.com,68

@@ -44,17 +44,18 @@ def extract_skills(text):
 def parse_resume(file_path):
     ext = os.path.splitext(file_path)[-1].lower()
     if ext == ".pdf":
-        text = extract_text_from_pdf(file_path)
+        full_text = extract_text_from_pdf(file_path)
     elif ext == ".docx":
-        text = extract_text_from_docx(file_path)
+        full_text = extract_text_from_docx(file_path)
     else:
         raise ValueError("Unsupported file format")
 
     parsed_data = {
-        "Name": extract_name(text),
-        "Email": extract_email(text),
-        "Phone": extract_phone(text),
-        "Skills": extract_skills(text)
+        "Name": extract_name(full_text),
+        "Email": extract_email(full_text),
+        "Phone": extract_phone(full_text),
+        "Skills": extract_skills(full_text),
+        "FullText": full_text
     }
 
     return parsed_data

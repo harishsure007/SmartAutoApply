@@ -1,86 +1,112 @@
 import streamlit as st
-import pandas as pd
+import json
 import os
+from PIL import Image
 import base64
 
-# Dummy credentials file (extend or replace with secure DB in production)
-USERS = {
-    "admin": "admin123",
-    "user": "user123"
-}
+SESSION_FILE = "user_profile.json"
+USERS_FILE = "users.json"  # File to store registered users
 
-# Centered layout with optional background styling
-page_bg = """
-<style>
-[data-testid="stAppViewContainer"] {
-    background-color: #f5f8fa;
-    padding-top: 3rem;
-}
-[data-testid="stHeader"] {
-    background: rgba(0,0,0,0);
-}
-h1 {
-    text-align: center;
-    font-size: 2.2rem;
-}
-.login-box {
-    max-width: 400px;
-    margin: 0 auto;
-    background-color: #ffffff;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
-}
-input[type="password"]::-ms-reveal,
-input[type="password"]::-ms-clear {
-    display: none;
-}
-</style>
-"""
+# Load users from JSON file
+def load_users():
+    if os.path.exists(USERS_FILE):
+        with open(USERS_FILE, "r") as f:
+            return json.load(f)
+    return {}
 
-st.markdown(page_bg, unsafe_allow_html=True)
+# Save users to JSON file
+def save_users(users):
+    with open(USERS_FILE, "w") as f:
+        json.dump(users, f)
 
+# Save session
+def save_session(username):
+    with open(SESSION_FILE, "w") as f:
+        json.dump({"username": username}, f)
 
-def login():
-    st.markdown("<div class='login-box'>", unsafe_allow_html=True)
-    st.markdown("<h1>Smart Auto-Apply Login</h1>", unsafe_allow_html=True)
+# Load session
+def load_session():
+    if os.path.exists(SESSION_FILE):
+        with open(SESSION_FILE, "r") as f:
+            data = json.load(f)
+            return data.get("username")
+    return None
 
-    username = st.text_input("Username")
+# Clear session
+def clear_session():
+    if os.path.exists(SESSION_FILE):
+        os.remove(SESSION_FILE)
 
-    # Password input with eye toggle using Streamlit components
-    pw_col1, pw_col2 = st.columns([9, 1])
-    with pw_col1:
-        password = st.text_input("Password", type="password", key="password")
-    with pw_col2:
-        show_icon = st.checkbox("👁", label_visibility="collapsed", key="toggle_pw")
+# Set background image with base64 encoding
+def set_background(image_path):
+    with open(image_path, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read()).decode()
+    css = f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/png;base64,{encoded_string}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+    }}
+    /* Optional: Make form background slightly transparent */
+    .main .block-container {{
+        background-color: rgba(255, 255, 255, 0.85);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }}
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)
 
-    if show_icon:
-        st.session_state["password"] = st.text_input("Re-enter Password", type="default", label_visibility="collapsed", value=st.session_state.get("password", ""), key="visible_pw")
-        password = st.session_state["password"]
+# Login/Register UI
+def login_user():
+    st.set_page_config(page_title="Login - Smart Auto-Apply", layout="centered")
 
-    if st.button("Login"):
-        if username in USERS and USERS[username] == password:
-            st.session_state.logged_in = True
-            st.session_state.username = username
-            st.success(f"Welcome, {username}!")
-        else:
-            st.error("❌ Invalid username or password")
+    # Set background image (adjust path if needed)
+    set_background("image dashboard.png")
 
-    # Reset password placeholder
-    with st.expander("🔁 Forgot Password?"):
-        st.info("Password reset feature is under development.")
-        st.text_input("Enter your email")
-        st.button("Send Reset Link")
+    st.title("🚀 Smart Auto-Apply")
 
-    # Sign-up form (demo)
-    st.markdown("---")
-    st.subheader("🆕 New Here? Create an Account")
-    new_user = st.text_input("New Username", key="signup_user")
-    new_pw = st.text_input("New Password", type="password", key="signup_pw")
-    if st.button("Sign Up"):
-        if new_user and new_pw:
-            st.success("✅ Account created successfully (demo-only)")
-        else:
-            st.warning("Please fill both fields to sign up.")
+    users = load_users()
+    option = st.radio("Choose an option", ["Login", "Register"], horizontal=True)
 
-    st.markdown("</div>", unsafe_allow_html=True)
+    if option == "Login":
+        st.subheader("🔐 Login")
+        username = st.text_input("Username", key="login_username")
+        password = st.text_input("Password", type="password", key="login_password")
+
+        if st.button("Login"):
+            if username in users and users[username] == password:
+                st.session_state.logged_in = True
+                st.session_state.username = username
+                st.session_state.page = "📈 Dashboard"
+                save_session(username)
+                st.success(f"✅ Welcome, {username}!")
+                st.experimental_rerun()
+            else:
+                st.error("🚫 Invalid username or password")
+
+    else:
+        st.subheader("🆕 Register")
+        new_user = st.text_input("New Username", key="register_username")
+        new_pass = st.text_input("New Password", type="password", key="register_password")
+        confirm_pass = st.text_input("Confirm Password", type="password", key="confirm_password")
+
+        if st.button("Register"):
+            if not new_user or not new_pass:
+                st.warning("⚠️ Please fill in all fields.")
+            elif new_user in users:
+                st.warning("⚠️ Username already exists.")
+            elif new_pass != confirm_pass:
+                st.warning("⚠️ Passwords do not match.")
+            else:
+                users[new_user] = new_pass
+                save_users(users)
+                st.success("✅ Account created. You can now login.")
+
+# Run login only if this file is executed directly
+if __name__ == "__main__":
+    login_user()
