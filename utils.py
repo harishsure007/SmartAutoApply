@@ -63,3 +63,15 @@ def load_applied_links(path="applied_jobs.csv"):
         except pd.errors.EmptyDataError:
             return set()
     return set()
+
+
+# ---------- USER SESSION HANDLING ----------
+
+SESSION_FILE = "user_profile.json"
+
+def load_session():
+    if os.path.exists(SESSION_FILE):
+        with open(SESSION_FILE, "r") as f:
+            data = json.load(f)
+            return data.get("username")
+    return None

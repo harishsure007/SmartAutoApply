@@ -169,6 +169,14 @@ def cv_builder_page():
         else:
             st.warning("❗ Please enter a command.")
 
+
+    # ⬅️ Back to Dashboard Button
+    st.markdown("---")
+    if st.button("⬅️ Back to Dashboard"):
+        st.session_state.page = "📈 Dashboard"
+        st.experimental_rerun()
+
+
 # Optional standalone execution
 if __name__ == "__main__":
     cv_builder_page()

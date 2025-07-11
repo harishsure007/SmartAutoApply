@@ -1,7 +1,6 @@
 import streamlit as st
 import json
 import os
-from PIL import Image
 import base64
 
 SESSION_FILE = "user_profile.json"
@@ -24,14 +23,6 @@ def save_session(username):
     with open(SESSION_FILE, "w") as f:
         json.dump({"username": username}, f)
 
-# Load session
-def load_session():
-    if os.path.exists(SESSION_FILE):
-        with open(SESSION_FILE, "r") as f:
-            data = json.load(f)
-            return data.get("username")
-    return None
-
 # Clear session
 def clear_session():
     if os.path.exists(SESSION_FILE):
@@ -39,6 +30,9 @@ def clear_session():
 
 # Set background image with base64 encoding
 def set_background(image_path):
+    if not os.path.exists(image_path):
+        st.error(f"⚠️ Background image '{image_path}' not found.")
+        return
     with open(image_path, "rb") as image_file:
         encoded_string = base64.b64encode(image_file.read()).decode()
     css = f"""
@@ -50,7 +44,6 @@ def set_background(image_path):
         background-position: center;
         background-attachment: fixed;
     }}
-    /* Optional: Make form background slightly transparent */
     .main .block-container {{
         background-color: rgba(255, 255, 255, 0.85);
         padding: 2rem;
@@ -80,12 +73,13 @@ def login_user():
 
         if st.button("Login"):
             if username in users and users[username] == password:
+                # Set session state flags on successful login
                 st.session_state.logged_in = True
                 st.session_state.username = username
                 st.session_state.page = "📈 Dashboard"
-                save_session(username)
+                save_session(username)  # Optional: save session for persistent login
                 st.success(f"✅ Welcome, {username}!")
-                st.experimental_rerun()
+                st.experimental_rerun()  # Refresh app to go to dashboard
             else:
                 st.error("🚫 Invalid username or password")
 

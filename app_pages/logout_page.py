@@ -1,5 +1,5 @@
 import streamlit as st
-from login import clear_session
+from app_pages.login_page import clear_session
 
 def logout_page():
     st.title("🔒 Logging out...")

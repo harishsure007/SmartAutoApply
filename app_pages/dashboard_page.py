@@ -5,7 +5,7 @@ import re
 import spacy
 import PyPDF2  # Required for PDF parsing
 
-from login import clear_session
+from app_pages.login_page import clear_session
 from app_pages.compare_resume_page import compare_resume_page
 from utils import load_data, load_applied_links, load_saved_jobs, save_job
 

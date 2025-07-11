@@ -6,11 +6,13 @@ import re
 import spacy
 
 # --- Local imports ---
-from login import login_user, load_session
+from app_pages.login_page import login_user
 from app_pages.logout_page import logout_page
 from app_pages.compare_resume_page import compare_resume_page
 from app_pages.dashboard_page import dashboard
-from utils import load_last_page, save_current_page
+from utils import load_last_page, save_current_page  # removed load_session here
+from streamlit_extras.switch_page_button import switch_page
+from app_pages.welcome_page import main as welcome_page
 
 # --- OpenAI API Key ---
 from config.config import OPENAI_API_KEY
@@ -26,27 +28,26 @@ st.set_page_config(page_title="Smart Auto-Apply", layout="wide")
 # --- File Paths ---
 SAVED_JOBS_FILE = "saved_jobs.csv"
 
-# --- Session Login Check ---
-# Load user from persistent session (e.g., JSON file)
-username = load_session()
-if username and "logged_in" not in st.session_state:
-    st.session_state.logged_in = True
-    st.session_state.username = username
+# ----------- Removed load_session usage -----------
+# username = load_session()
+# if username and "logged_in" not in st.session_state:
+#     st.session_state.logged_in = True
+#     st.session_state.username = username
+# --------------------------------------------------
 
 # --- Main App Router ---
 def main():
     # Initialize page state if missing
     if "page" not in st.session_state:
-        st.session_state.page = "login"
+        st.session_state.page = "welcome"
 
-    # Show login page if not logged in
-    if not st.session_state.get("logged_in", False) or st.session_state.page == "login":
+    # Show login page if not logged in (except allow welcome page)
+    if not st.session_state.get("logged_in", False) and st.session_state.page != "welcome":
         st.session_state.page = "login"
         login_user()
         st.stop()
 
-    # Debug current page
-    st.write(f"🛠️ DEBUG: Current page = {st.session_state.page}")
+
 
     # Route based on current page
     if st.session_state.page == "📈 Dashboard":
@@ -61,6 +62,9 @@ def main():
 
     elif st.session_state.page == "🔓 Logout":
         logout_page()
+
+    elif st.session_state.page == "welcome":
+        welcome_page()
 
     else:
         st.warning("⚠️ Unknown page. Redirecting to Dashboard...")
