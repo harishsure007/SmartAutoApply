@@ -90,7 +90,7 @@ def cv_builder_page():
         if text:
             st.session_state["uploaded_resume"] = text
             st.success("✅ PDF Resume uploaded and text extracted.")
-            st.experimental_rerun()
+            st.rerun()
 
     if "uploaded_resume" not in st.session_state and "job_description" not in st.session_state:
         st.warning("⚠️ Please upload your resume or provide a job description in the **Dashboard**.")
@@ -110,7 +110,7 @@ def cv_builder_page():
                 if resume:
                     st.session_state["uploaded_resume"] = resume
                     st.success("✅ Resume generated.")
-                    st.experimental_rerun()
+                    st.rerun()
         return
 
     # Keyword Extraction
@@ -140,14 +140,14 @@ def cv_builder_page():
         if st.button("💾 Save Resume"):
             st.session_state["uploaded_resume"] = edited_text
             st.success("✅ Resume updated.")
-            st.experimental_rerun()
+            st.rerun()
 
     with col2:
         if st.button("✨ Enhance with Keywords"):
             enhanced = insert_keywords_into_resume(edited_text, keywords)
             st.session_state["uploaded_resume"] = enhanced
             st.success("✅ Keywords added.")
-            st.experimental_rerun()
+            st.rerun()
 
     # Resume Download
     st.markdown("### 📥 Download Resume")
@@ -165,7 +165,7 @@ def cv_builder_page():
                 if gen_resume:
                     st.session_state["uploaded_resume"] = gen_resume
                     st.success("✅ Resume created from your command.")
-                    st.experimental_rerun()
+                    st.rerun()
         else:
             st.warning("❗ Please enter a command.")
 

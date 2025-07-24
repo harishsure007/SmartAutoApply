@@ -7,6 +7,128 @@ import spacy
 # Load spaCy model
 nlp = spacy.load("en_core_web_sm")
 
+# ------------------------- Skills List -------------------------
+
+SKILLS_LIST = [
+    # Programming Languages
+    "python", "java", "c++", "c", "c#", "javascript", "typescript", "ruby", "go", "swift", "kotlin", "scala", "php", "rust",
+    "perl", "shell scripting", "bash", "objective-c", "matlab", "r", "dart", "groovy", "elixir", "haskell", "clojure",
+
+    # Web Development Frameworks & Libraries
+    "html", "css", "sass", "less", "react", "angular", "vue", "ember", "backbone", "jquery",
+    "node.js", "express", "django", "flask", "spring", "laravel", "symfony", "graphql", "apollo",
+    "bootstrap", "tailwind css", "webassembly", "next.js", "nuxt.js", "redux", "gatsby", "jekyll", "webpack", "babel",
+
+    # Databases & Data Storage
+    "sql", "mysql", "postgresql", "mongodb", "redis", "oracle", "sqlite", "cassandra", "elasticsearch",
+    "firebase", "dynamodb", "microsoft sql server", "neo4j", "hbase", "cockroachdb", "mariadb", "influxdb", "timescaledb",
+
+    # Cloud Platforms & Services
+    "aws", "amazon web services", "azure", "google cloud", "gcp", "ibm cloud", "oracle cloud", "digitalocean",
+    "heroku", "firebase", "cloudflare", "linode", "rackspace", "aliyun",
+
+    # DevOps, Containerization & Orchestration
+    "docker", "kubernetes", "terraform", "ansible", "puppet", "chef", "jenkins", "travis ci", "circleci",
+    "gitlab ci", "ci/cd", "helm", "prometheus", "grafana", "elasticsearch stack", "splunk", "new relic",
+    "vault", "consul", "linkerd", "istio", "openshift", "argo cd", "spinnaker", "rancher",
+
+    # Operating Systems & Networking
+    "linux", "unix", "windows server", "macos", "networking", "tcp/ip", "dns", "dhcp", "vpn", "firewall",
+    "load balancing", "proxy", "wireless networking", "network security", "iptables", "wireshark", "nmap", "netcat",
+
+    # Data Science, Machine Learning & AI Tools
+    "machine learning", "deep learning", "tensorflow", "pytorch", "scikit-learn", "keras", "pandas", "numpy",
+    "matplotlib", "seaborn", "nlp", "computer vision", "opencv", "data analysis", "data mining", "big data",
+    "hadoop", "spark", "apache kafka", "apache flink", "data engineering", "reinforcement learning",
+    "unsupervised learning", "supervised learning", "time series analysis", "tensorflow serving", "xgboost",
+    "lightgbm", "catboost", "mlflow", "kubeflow", "airflow", "great expectations", "dvc", "tfx",
+
+    # Software Development Practices & Tools
+    "agile", "scrum", "kanban", "test-driven development", "tdd", "behavior-driven development", "bdd",
+    "rest api", "graphql api", "microservices", "monolithic architecture", "serverless",
+    "event-driven architecture", "clean code", "design patterns", "software architecture",
+    "performance tuning", "debugging", "version control", "git", "svn", "mercurial", "jira", "confluence",
+    "postman", "swagger", "soapui", "fiddler", "selenium", "cypress", "jmeter", "loadrunner",
+
+    # Security Tools & Concepts
+    "cybersecurity", "penetration testing", "network security", "application security", "encryption",
+    "ssl/tls", "oauth", "jwt", "firewalls", "antivirus", "vulnerability assessment", "threat modeling",
+    "security compliance", "gdpr", "hipaa", "wireshark", "burp suite", "metasploit", "nessus", "openvas",
+    "snort", "ossec", "kali linux", "chkrootkit",
+
+    # Mobile & Embedded Development
+    "android development", "ios development", "flutter", "react native", "xamarin", "embedded systems",
+    "arduino", "raspberry pi", "iot", "robotics", "firmware development", "real-time operating systems",
+    "qt", "blackberry", "cordova", "phonegap", "unity", "unreal engine", "vuforia",
+
+    # Others / Emerging Technologies
+    "blockchain", "cryptocurrency", "smart contracts", "decentralized applications", "virtual reality",
+    "augmented reality", "edge computing", "quantum computing", "chatbots", "voice assistants",
+    "api design", "multithreading", "concurrency", "parallel computing", "cloud computing",
+    "virtualization", "automation", "business intelligence", "data visualization", "etl", "etl pipelines",
+    "docker swarm", "openstack", "apache airflow", "elastic stack", "apache hive", "apache pig",
+    "apache storm", "spark streaming", "tensorflow lite", "keras tuner", "mlflow", "kubeflow",
+    "airflow", "great expectations", "data quality", "data governance", "splunk", "datadog", "new relic",
+    "pagerduty", "zabbix", "nagios", "sentry", "rollbar",
+
+    # IDEs and Editors
+    "visual studio code", "intellij idea", "eclipse", "pycharm", "android studio", "xcode", "netbeans",
+    "sublime text", "vim", "emacs", "atom",
+
+    # Collaboration & Communication
+    "slack", "microsoft teams", "zoom", "jira", "confluence", "trello", "asana", "monday.com", "github", "gitlab", "bitbucket",
+
+    # Testing & QA
+    "selenium", "cypress", "junit", "pytest", "mocha", "chai", "jest", "karma", "jasmine", "postman", "soapui",
+    "loadrunner", "jmeter", "gatling",
+
+    # Containers & Virtualization
+    "docker", "podman", "lxc", "vagrant", "virtualbox", "vmware", "hyper-v", "kvm",
+
+    # Monitoring & Logging
+    "prometheus", "grafana", "elk stack", "elastic stack", "logstash", "kibana", "fluentd", "graylog", "splunk", "new relic", "datadog",
+
+    # Messaging & Streaming
+    "apache kafka", "rabbitmq", "activemq", "mqtt", "zeromq",
+
+    # Automation & Scripting
+    "ansible", "puppet", "chef", "saltstack", "terraform", "bash scripting", "powershell",
+
+    # Big Data & Analytics
+    "hadoop", "spark", "flink", "hive", "pig", "storm", "kylin", "impala",
+
+    # Business Intelligence & Visualization
+    "tableau", "power bi", "qlikview", "looker", "d3.js", "plotly", "superset", "metabase", "apache echarts",
+
+    # API & Integration
+    "rest api", "graphql", "soap", "oauth2", "openapi", "swagger", "postman",
+
+    # CRM & ERP
+    "salesforce", "sap", "oracle erp", "microsoft dynamics", "zoho crm",
+
+    # Hardware & IoT Platforms
+    "arduino", "raspberry pi", "esp32", "nvidia jetson", "intel galileo", "beaglebone",
+
+    # Cloud Native & Service Mesh
+    "istio", "linkerd", "envoy", "consul", "open service mesh",
+
+    # Software Containers & Registries
+    "docker hub", "harbor", "aws ecr", "gcp container registry", "azure container registry",
+
+    # Message Brokers & Queues
+    "rabbitmq", "activemq", "amazon sqs", "google pubsub",
+
+    # CI/CD Tools
+    "jenkins", "travis ci", "circleci", "gitlab ci", "azure pipelines", "bamboo",
+
+    # Configuration Management
+    "ansible", "puppet", "chef", "saltstack",
+
+    # Miscellaneous
+    "oauth", "jwt", "ssl", "tls", "ldap", "active directory", "dns", "dhcp",
+
+]
+
 # ------------------------- Helper Functions -------------------------
 
 def extract_keywords(text):
@@ -16,6 +138,14 @@ def extract_keywords(text):
         for token in doc
         if token.pos_ in ["NOUN", "VERB", "PROPN"] and not token.is_stop and token.is_alpha
     }
+
+def extract_skills(text):
+    text_lower = text.lower()
+    found_skills = set()
+    for skill in SKILLS_LIST:
+        if skill in text_lower:
+            found_skills.add(skill)
+    return found_skills
 
 def highlight_keywords(text, matches, missing, color_matched="green", color_missing="red"):
     words = text.split()
@@ -58,10 +188,10 @@ def compare_resume_page():
         st.warning("⚠️ No job description found. Please enter or upload a job description first.")
         return
 
-    # Comparison mode selector
+    # Updated comparison modes
     comparison_mode = st.radio("🔍 Select Comparison Mode", [
         "Word-to-Word Comparison",
-        "Main Keywords Comparison",
+        "Skills Matching Comparison",  # changed here
         "Overall Match Percentage"
     ])
 
@@ -81,33 +211,32 @@ def compare_resume_page():
                 unsafe_allow_html=True
             )
 
-        elif comparison_mode == "Main Keywords Comparison":
-            main_jd_keywords = get_top_tfidf_keywords(jd_text, top_n=10)
-            resume_keywords = extract_keywords(resume_text)
-            jd_keywords = extract_keywords(jd_text)
+        elif comparison_mode == "Skills Matching Comparison":
+            jd_skills = extract_skills(jd_text)
+            resume_skills = extract_skills(resume_text)
 
-            matched = jd_keywords & resume_keywords
-            missing = jd_keywords - resume_keywords
+            matched = jd_skills & resume_skills
+            missing = jd_skills - resume_skills
 
-            total_keywords = len(jd_keywords)
-            matched_percent = (len(matched) / total_keywords) * 100 if total_keywords else 0
+            total_skills = len(jd_skills)
+            matched_percent = (len(matched) / total_skills) * 100 if total_skills else 0
 
-            st.markdown("### 🎯 Keyword Match Percentage")
+            st.markdown("### 🎯 Skills Match Percentage")
             st.markdown(
                 f"<div style='font-size: 28px; color: green; font-weight: bold;'>{matched_percent:.0f}%</div>",
                 unsafe_allow_html=True
             )
 
-            st.markdown("### 🔑 Main Keywords in Job Description (Top 10)")
-            st.markdown(", ".join(sorted(main_jd_keywords)) or "No main keywords found.")
+            st.markdown("### 🔑 Skills Required in Job Description")
+            st.markdown(", ".join(sorted(jd_skills)) or "No skills found.")
 
             col1, col2 = st.columns(2)
             with col1:
-                st.markdown("✅ **Matched Keywords**")
-                st.markdown(", ".join(sorted(matched)) or "No matches found.")
+                st.markdown("✅ **Matched Skills**")
+                st.markdown(", ".join(sorted(matched)) or "No matched skills.")
             with col2:
-                st.markdown("❌ **Missing Keywords**")
-                st.markdown(", ".join(sorted(missing)) or "No missing keywords.")
+                st.markdown("❌ **Missing Skills**")
+                st.markdown(", ".join(sorted(missing)) or "No missing skills.")
 
             st.markdown("### 🧾 Resume Highlight")
             st.markdown(highlight_keywords(resume_text, matched, set()), unsafe_allow_html=True)
@@ -149,7 +278,7 @@ def compare_resume_page():
             st.session_state.selected_jd = jd_text
             st.session_state.missing_keywords = list(
                 missing_words if comparison_mode == "Word-to-Word Comparison"
-                else missing if comparison_mode == "Main Keywords Comparison"
+                else missing if comparison_mode == "Skills Matching Comparison"
                 else []
             )
 
@@ -158,7 +287,7 @@ def compare_resume_page():
             st.session_state.selected_jd = jd_text
             st.session_state.missing_keywords = list(
                 missing_words if comparison_mode == "Word-to-Word Comparison"
-                else missing if comparison_mode == "Main Keywords Comparison"
+                else missing if comparison_mode == "Skills Matching Comparison"
                 else []
             )
             st.session_state.page = "📄 Resume Optimizer"

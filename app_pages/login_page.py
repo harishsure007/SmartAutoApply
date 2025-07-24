@@ -56,7 +56,6 @@ def set_background(image_path):
 
 # Login/Register UI
 def login_user():
-    st.set_page_config(page_title="Login - Smart Auto-Apply", layout="centered")
 
     # Set background image (adjust path if needed)
     set_background("image dashboard.png")

@@ -100,6 +100,9 @@ def set_background(image_path):
     """
     st.markdown(css, unsafe_allow_html=True)
 
+
+
+
 # Render Header
 def render_header():
     col1, col2, col3, col4, col5 = st.columns([5, 1, 0.3, 1, 0.2])
@@ -113,7 +116,7 @@ def render_header():
 
 # Main content
 def main():
-    st.set_page_config(page_title="Smart Auto-Apply", layout="centered")
+   
     set_background("image dashboard.png")
 
     render_header()
